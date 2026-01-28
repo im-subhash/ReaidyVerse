@@ -31,9 +31,18 @@ if (!fs.existsSync(path.join(__dirname, 'uploads'))) {
 
 // Database Connection
 // Database Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/instagram-clone')
+const mongoURI = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/instagram-clone';
+console.log(`Connecting to MongoDB... using ${mongoURI.includes('localhost') ? 'Localhost' : 'Atlas Cloud'}`);
+
+mongoose.connect(mongoURI)
     .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log('MongoDB Connection Error:', err));
+    .catch(err => {
+        console.error('MongoDB Connection Error:', err);
+        // If connecting to localhost fails in production, log a clear warning
+        if (process.env.NODE_ENV === 'production') {
+            console.error('CRITICAL: You are running in production but trying to connect to localhost. Please set MONGO_URI.');
+        }
+    });
 
 // Basic Route
 app.get('/', (req, res) => {
