@@ -1,0 +1,160 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.modal {
+    background: #fff;
+    max-width: 1100px;
+    width: 100%;
+    height: 85vh;
+    display: flex;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Left Side: Image */
+.imageContainer {
+    flex: 1.5;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Right Side: Comments & Details */
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 400px;
+    max-width: 500px;
+    border-left: 1px solid #dbdbdb;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.userAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.username {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #262626;
+}
+
+/* Comments Scroll Area */
+.scrollArea {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+/* Single Comment */
+.commentRow {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.commentContent {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.commentUsername {
+    font-weight: 600;
+    margin-right: 6px;
+}
+
+/* Footer (Actions + Input) */
+.footer {
+    padding: 10px 16px;
+}
+
+.actions {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 10px;
+    color: #262626;
+}
+
+.likes {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+}
+
+.timestamp {
+    font-size: 0.7rem;
+    color: #8e8e8e;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.commentForm {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #dbdbdb;
+    padding-top: 12px;
+}
+
+.input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.9rem;
+}
+
+.postBtn {
+    border: none;
+    background: none;
+    color: #0095f6;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.postBtn:disabled {
+    opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+    .modal {
+        flex-direction: column;
+        height: 100vh;
+        width: 100vw;
+    }
+
+    .imageContainer {
+        flex: none;
+        height: 40vh;
+    }
+
+    .content {
+        min-width: auto;
+    }
+}

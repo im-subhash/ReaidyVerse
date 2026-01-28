@@ -39,6 +39,42 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Get posts by user
+router.get('/user/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username });
+        if (!user) return res.status(404).json("User not found");
+
+        const posts = await Post.find({ author: user._id })
+            .sort({ createdAt: -1 })
+            .populate('author', 'username avatar')
+            .populate({
+                path: 'comments',
+                populate: { path: 'author', select: 'username' }
+            });
+
+        const formattedPosts = posts.map(post => ({
+            id: post._id,
+            username: post.author ? post.author.username : 'Unknown',
+            userAvatar: post.author ? post.author.avatar : null,
+            imageUrl: post.imageUrl,
+            caption: post.caption,
+            initialLikes: post.likesCount || 0,
+            timestamp: new Date(post.createdAt).toLocaleDateString(),
+            comments: post.comments.map(c => ({
+                id: c._id,
+                username: c.author ? c.author.username : 'Unknown',
+                text: c.isFlagged ? '[Content Hidden by AI]' : c.text
+            })),
+            isLiked: false
+        }));
+
+        res.json(formattedPosts);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
 // Create post
 router.post('/', upload, async (req, res) => {
     try {
@@ -105,6 +141,25 @@ router.put('/:id/like', async (req, res) => {
 
         res.status(200).json("The post has been liked");
     } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+// Delete Post
+router.delete('/:id', async (req, res) => {
+    try {
+        console.log(`[DELETE] Request for post: ${req.params.id}`);
+        const post = await Post.findById(req.params.id);
+
+        if (!post) {
+            return res.status(404).json("Post not found");
+        }
+
+        await Post.findByIdAndDelete(req.params.id);
+        console.log(`[DELETE] Deleted successfully`);
+        res.status(200).json("Post has been deleted");
+    } catch (err) {
+        console.error(`[DELETE] Error: ${err.message}`);
         res.status(500).json(err);
     }
 });

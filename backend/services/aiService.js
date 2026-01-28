@@ -48,8 +48,8 @@ const moderateText = async (text) => {
         }
 
         // 2. Groq Custom Chat Moderation
-        if (!process.env.GROQ_API_KEY) {
-            console.warn("Groq API Key not found. Skipping moderation.");
+        if (!process.env.GROQ_API_KEY || process.env.GROQ_API_KEY.includes('paste_your_groq_key')) {
+            console.warn("Groq API Key missing or invalid. AI Moderation skipped.");
             return { flagged: false, categories: [], reason: null };
         }
 
